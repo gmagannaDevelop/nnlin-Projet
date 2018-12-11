@@ -1,4 +1,4 @@
-function [x,e,t]=nnls_nomequipe(A,b,x0,timelimit,choix)
+function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
   % Entrees :
   % A est une matrice m x n
   % b est un vecteur m x 1
@@ -7,6 +7,8 @@ function [x,e,t]=nnls_nomequipe(A,b,x0,timelimit,choix)
   % si choix==1 -> methode du gradient
   % si choix==2 -> methode du gradient accelere
   % si choix==3 -> methode coordinate descent
+  
+  
   
   % Sorties :
   % x est vecteur n x 1
@@ -18,49 +20,101 @@ function [x,e,t]=nnls_nomequipe(A,b,x0,timelimit,choix)
   Atb = A'*b;
   btb = b'*b;
   L   = max(eig(AtA));
-  gamma = .....; %COMPLETER ICI
-  x     = gamma*x0;
+  %gamma = .....; %COMPLETER ICI
+  %x     = gamma*x0;
   
-  [Q, x0, c, p] = quadfunctiongenerator(choix);
-  
+  x = [];
+  x1 = x0;
   %Initialisation des vecteurs erreurs et temps
   temps = cputime;
   t     = 0;
-  e     = 0.5*(x'*AtA*x-2*Atb'*x+btb); 
+  e     = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb); 
   
-  alpha = 0.9; %necessaire pour la methode du gradient accelere
+  %alpha = 0.9; %necessaire pour la methode du gradient accelere
+  alpha = 0.9;
   iter  = 0;
   while cputime-temps<=timelimit
     iter=iter+1;
     
     if choix==1
-      %COMPLETER ICI
+    f = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb);
+    %calcule la valeur de f a chaque iteree.
+    delta = AtA*x0 - Atb; 
+    %calcule le gradient a chaque iteree. 
+   
+    
+    % ICI :Algorithme à implémenter
+    alpha = (delta'*delta)/(delta'*AtA*delta);
+	  %alpha = 1/L;
+    x0 = x0 - alpha*delta;
+   
+    
+    
     end
     
     if choix==2
-      %COMPLETER ICI
+      
+      f = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb);
+      %calcule la valeur de f a chaque iteree.
+      delta = AtA*x0 - Atb; 
+      %calcule le gradient a chaque iteree. 
+    
+      beta = (i - 1)/(i + 2);
+  	  y = x0 + beta*(x0 - x1);
+      %CF enonce
+    
+      x1 = x0 ;
+      %x0 = x(i-1);
+    
+      deltaY = AtA*y - Atb;
+      
+      %calcule delta(y)
+      x0=y - (1/L)*deltaY;
+      %mise à jour de X
     end
     
     
     if choix==3
-      n = length(x);
-  
-  %generer soit meme la fonction quadratique
-  
-  maxiter = input ( 'Nombre de iterations : '); 
-  
-  [x, z] = coordinatedescent(Q,c,p,x0,maxiter);
-  % implemente la descente de coordonnees en choisissant 
-  % les variables aleatoirement.
-  
-  visualizer(x, z, Q, c, p);
-  % visualisation graphique des iterations et de la fonction
-    end   
+      n = length(x0);
+      B = 0;
+      f = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb);
+      %calcule la valeur de f a chaque iteree.
+      delta = AtA*x0 - Atb; 
+      %calcule le gradient a chaque iteree.
+      
+      %% Choisir la variable a minimiser aleatoirement:
+      j = ceil(rand(1)*n);       
+    
+      if (delta(j) == 0)
+        %% Si la derivee partielle selon la variable x_j
+          %% vaut zero, x_j reste la meme
+      else          
+        
+      
+        for o = 1:n
+          B += (AtA(j,o)*x0(o) + AtA(o,j)*x0(o))/2; 
+        endfor
+        
+        % Mettre a jour la variable x_j :
+        x0(j) = (B - (AtA(j,j)*x0(j)) - Atb(j))/(-AtA(j,j)) ;
+        
+        x0(j) = max( x0(j),0) ; % Projection sur le domaine contraint 
+        %mise en commentaire car inutile à la comparaison graphique
+        %n'hésitez pas à retirer % pour observer le résultat
+     endif
+    
+    endif 
     
     %Calcul du temps et de l'erreur
     time_lost = cputime;
-    e         = [e 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
+    %e         = [e 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
     temps     = temps+(cputime-time_lost);
-    t         = [t cputime-temps];
+    t         = [t, cputime-temps];
+    
+    
+    x = [x, x0]; % ajouter l'iteree anterieure
+    
+    e = [e, f] ; % Calcul de l'erreur 
   end
+
 end
