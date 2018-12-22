@@ -21,7 +21,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
   btb = b'*b;
   L   = max(eig(AtA));
   gamma = (A'*b)/(A'*A*x0); %COMPLETER ICI
-  x     = gamma*x0;
+  x0     = gamma*x0;
  
   x = [];
   x1 = x0;
@@ -35,7 +35,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
   alpha = 0.9;
   iter  = 0;
   while cputime-temps<=timelimit
-    iter=iter+1;
+    
     
     
     if choix==1
@@ -65,7 +65,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
       delta = AtA*x0 - Atb; 
       %calcule le gradient a chaque iteree. 
     
-      beta = (i - 1)/(i + 2);
+      beta = (iter - 1)/(iter + 2);
   	  y = x0 + beta*(x0 - x1);
       %CF enonce
     
@@ -98,13 +98,16 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
         
       
         for o = 1:n
-          B += (AtA(j,o)*x0(o) + AtA(o,j)*x0(o))/2; 
+          if (o != j) 
+            
+            B += (AtA(j,o)*x0(o) + AtA(o,j)*x0(o))/2; 
+          endif
         endfor
         
         % Mettre a jour la variable x_j :
-        x0(j) = (B - (AtA(j,j)*x0(j)) - Atb(j))/(-AtA(j,j)) ;
+        x0(j) = (B - Atb(j))/(-AtA(j,j)) ;
         
-        x0(j) = max( x0(j),0) ; % Projection sur le domaine contraint 
+        x0(j) = max(0, x0(j)) ; % Projection sur le domaine contraint 
         %mise en commentaire car inutile à la comparaison graphique
         %n'hésitez pas à retirer % pour observer le résultat
      endif
@@ -116,7 +119,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
     %e         = [e 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
     temps     = temps+(cputime-time_lost);
     t         = [t, cputime-temps];
-    
+    iter=iter+1;
     
     x = [x, x0]; % ajouter l'iteree anterieure
     
