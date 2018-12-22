@@ -63,7 +63,12 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
       %calcule la valeur de f a chaque iteree.
       delta = AtA*x - Atb; 
       %calcule le gradient a chaque iteree. 
+      
     
+    
+    
+    
+    %accelerate Nesterov
       beta = (iter - 1)/(iter + 2);
   	  y = x + beta*(x - x1);
       %CF enonce
@@ -72,7 +77,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
       %x(i) = x(i-1);
     
       deltaY = AtA*y - Atb;
-      %alpha = (deltaY'*deltaY)/(deltaY'*AtA*deltaY);
+      
       %calcule delta(y)
       x= y - (1/L)*deltaY;
       %mise à jour de X
