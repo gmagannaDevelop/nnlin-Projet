@@ -20,11 +20,12 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
   Atb = A'*b;
   btb = b'*b;
   L   = max(eig(AtA));
-  %gamma = .....; %COMPLETER ICI
-  %x     = gamma*x0;
-  
+  gamma = (A'*b)/(A'*A*x0); %COMPLETER ICI
+  x     = gamma*x0;
+ 
   x = [];
   x1 = x0;
+  
   %Initialisation des vecteurs erreurs et temps
   temps = cputime;
   t     = 0;
@@ -36,23 +37,28 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
   while cputime-temps<=timelimit
     iter=iter+1;
     
+    
     if choix==1
+    
+    
     f = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb);
     %calcule la valeur de f a chaque iteree.
     delta = AtA*x0 - Atb; 
     %calcule le gradient a chaque iteree. 
    
     
+    
     % ICI :Algorithme à implémenter
     alpha = (delta'*delta)/(delta'*AtA*delta);
 	  %alpha = 1/L;
-    x0 = x0 - alpha*delta;
+    x0 = max(x0 - alpha*delta,0);
    
     
     
     end
     
     if choix==2
+      
       
       f = 0.5*(x0'*AtA*x0-2*Atb'*x0+btb);
       %calcule la valeur de f a chaque iteree.
@@ -69,7 +75,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
       deltaY = AtA*y - Atb;
       
       %calcule delta(y)
-      x0=y - (1/L)*deltaY;
+      x0=max(y - (1/L)*deltaY,0);
       %mise à jour de X
     end
     
