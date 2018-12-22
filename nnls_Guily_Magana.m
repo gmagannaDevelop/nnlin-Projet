@@ -111,7 +111,7 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
      endif
     
     endif 
-    x = max(0, x) ; 
+    %x = max(0, x) ; 
     %Calcul du temps et de l'erreur
     time_lost = cputime;
     e         = [e, 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
