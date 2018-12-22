@@ -1,4 +1,5 @@
-function [W,H,e,t]=nmf_nomequipe(X,W0,H0,timelimit)
+
+function [W,H,e,t]=nmf_Magana(X,W0,H0,timelimit)
   % Entrees :
   % X est une matrice m x n
   % W0 est une matrice m x r
@@ -32,8 +33,27 @@ function [W,H,e,t]=nmf_nomequipe(X,W0,H0,timelimit)
   while cputime-temps<=timelimit
     iter=iter+1;
     
-    %Optimisation de H
-    %COMPLETER ICI
+   %%Optimisation de H
+    % On fait n problemes nnls, un pour chaque cologne de H
+    % La cologne 'i' de H -->  H(:,i)
+    % La matrice W
+    % La cologne 'i' de X -->  X(:,i)
+    % A partir de :
+    %  X(:,i) = W*H(:,i)
+    % On peut le reecrire (pour le cas optimale) de la
+    % façon suivante:
+    %   W*H(:,i) - X(:,i)  = 0
+    %   A*x      - b       = 0
+    % On peut donc appeler la fonction nnls:
+    %   A = W
+    %   x = H(:,i)
+    %   b = X(:,i)
+    % [x     ,      _e,     _t] = nnls_Guily_Magana(A, b,      x0,     timelimit, 2)
+    % [H(:,i), _erreur, _temps] = nnls_Guily_Magana(W, X(:,i), H0(:,i),timelimit, 2)
+    % 2 c'est la methode du gradient accelere, celle que l'on a trouvee optimale. 
+    for i=1:n
+      [H(:,i), _e, _t] = nnls_Guily_Magana(W,X(:,i),H0(:,i), _timelim, 2)
+    endfor
     
     %Optimisation de W
     %COMPLETER ICI
