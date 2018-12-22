@@ -72,9 +72,9 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
       %x(i) = x(i-1);
     
       deltaY = AtA*y - Atb;
-      alpha = (deltaY'*deltaY)/(deltaY'*AtA*deltaY);
+      %alpha = (deltaY'*deltaY)/(deltaY'*AtA*deltaY);
       %calcule delta(y)
-      x= y - alpha*deltaY;
+      x= y - (1/L)*deltaY;
       %mise à jour de X
     end
     
@@ -111,12 +111,12 @@ function [x,e,t]=nnls_Guily_Magana(A,b,x0,timelimit,choix)
      endif
     
     endif 
-    %x = max(0, x) ; 
+    x = max(0, x) ; 
     %Calcul du temps et de l'erreur
     time_lost = cputime;
-    e         = [e, 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
+    e         = [e 0.5*(x'*AtA*x-2*Atb'*x+btb)]; 
     temps     = temps+(cputime-time_lost);
-    t         = [t, cputime-temps];
+    t         = [t cputime-temps];
     iter=iter+1;
     
   end

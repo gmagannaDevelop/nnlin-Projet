@@ -103,3 +103,4 @@ function [x,e,t]=nnls_Guily(A,b,x0,timelimit,choix)
     temps     = temps+(cputime-time_lost);
     t         = [t cputime-temps];
   end
+end
