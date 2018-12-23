@@ -1,7 +1,7 @@
 clear all; clc; close all;
-load exemplennls1.mat;
+load exemplennls2.mat;
 
-timelimit=10;
+timelimit=30;
 % time for calculation
 
 %[A,b,x0] = quadfunctiongenerator();
