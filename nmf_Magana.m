@@ -48,15 +48,34 @@ function [W,H,e,t]=nmf_Magana(X,W0,H0,timelimit)
     %   A = W
     %   x = H(:,i)
     %   b = X(:,i)
-    % [x     ,      _e,     _t] = nnls_Guily_Magana(A, b,      x0,     timelimit, 2)
-    % [H(:,i), _erreur, _temps] = nnls_Guily_Magana(W, X(:,i), H0(:,i),timelimit, 2)
+    % [x     ,      _e,     _t] = nnls_Guily_Magana(A, b,      x0,      _timelimit, 2)
+    % [H(:,i), _erreur, _temps] = nnls_Guily_Magana(W, X(:,i), H0(:,i), _timelimit, 2)
     % 2 c'est la methode du gradient accelere, celle que l'on a trouvee optimale. 
     for i=1:n
-      [H(:,i), _e, _t] = nnls_Guily_Magana(W,X(:,i),H0(:,i), _timelim, 2)
+      [H(:,i), _e, _t] = nnls_Guily_Magana(W,X(:,i),H0(:,i), 0.05*timelimit, 2)
     endfor
     
-    %Optimisation de W
-    %COMPLETER ICI
+   %%Optimisation de W
+    % On fait m problemes nnls, un pour chaque file de W
+    % La file 'i' de W -->  W(i,:)
+    % La matrice H
+    % La file 'i' de X -->  X(i,:)
+    % A partir de :
+    %  X(i,:) = W*H(i,:)
+    % On peut le reecrire (pour le cas optimale) de la
+    % façon suivante:
+    %   W*H(i,:) - X(i,:)  = 0
+    %   A*x      - b       = 0
+    % On peut donc appeler la fonction nnls:
+    %   A = H
+    %   x = W(i,:)
+    %   b = X(i,:)
+    % [x     ,      _e,     _t] = nnls_Guily_Magana(A, b,      x0,      _timelimit, 2)
+    % [H(i,:), _erreur, _temps] = nnls_Guily_Magana(W, X(i,:), H0(1,:), _timelimit, 2)
+    % 2 c'est la methode du gradient accelere, celle que l'on a trouvee optimale. 
+    for i=1:n
+      [W(:,i), _e, _t] = nnls_Guily_Magana(H,X(i,:),W0(i,:), 0.05*timelimit, 2)
+    endfor
     
     %Calcul du temps et de l'erreur
     time_lost = cputime;

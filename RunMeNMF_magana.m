@@ -1,11 +1,18 @@
 clear all; clc; close all;
 load exemplenmf1.mat;
 
-W0=%COMPLETER ICI
-H0=%COMPLETER ICI
+% X est definie dans exemplenmf1.mat
+[m, n] = size(X);
+
+% Notre parametre arbitraire:
+r  = 2;
+
+RND    = rand(m, r);
+W0     = X * RND;
+H0     = rand(r, n);
 
 timelimit=10;
-[W,H,e,t]=nmf_nomequipe(X,W0,H0,timelimit);
+[W,H,e,t]=nmf_Magana(X,W0,H0,timelimit);
 
 %Graphes de l'erreur
 semilogy(t,e);
