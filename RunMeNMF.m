@@ -1,5 +1,5 @@
 clear all; clc; close all;
-load exemplenmf2.mat;
+load exemplenmf1.mat;
 
 [m,n]=size(X);
 W0=rand (m,3);
