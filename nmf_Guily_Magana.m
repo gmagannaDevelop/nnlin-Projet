@@ -28,12 +28,12 @@ function [W,H,e,t]=nmf_Guily_Magana(X,W0,H0,timelimit)
   t     = 0;
   e     = nX-2*sum(sum(A.*W))+sum(sum(B.*(W'*W)))
   
-  iter  = 0;
+  %iter  = 0;
   
-  beta = 0;
+  %beta = 0;
   while cputime-temps<=timelimit
     
-    iter  =  iter+1;
+    %iter  =  iter+1;
     
     
     %Optimisation de H (après avoir essayer des méthodes accélérées dérivé de la méthode
