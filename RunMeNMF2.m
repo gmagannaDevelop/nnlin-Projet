@@ -7,7 +7,7 @@ X3 = double(I(:,:,3));
 
 [m,n]=size(X1);
 
-r = 12;
+r = 12 ;
 timelimit=10;
 
 W0=rand (m,r);

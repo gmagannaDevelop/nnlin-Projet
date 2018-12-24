@@ -2,7 +2,7 @@ clear all; clc; close all;
 load exemplenmf1.mat;
 
 [m,n]=size(X);
-r=3;
+r=6;
 W0=rand(m,r);
 H0=rand(r,n);
 %cette initialisation semble être la meilleure (d'autres possibilités ont été testées)

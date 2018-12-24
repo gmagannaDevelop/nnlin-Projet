@@ -1,6 +1,0 @@
-nmf_Guily.m
-RunMeNMF_guily.m
-nmf_Guily_Magana.m
-nmf_Magana.m
-nnls_Guily_Magana.m
-RunMeNMF_magana.m

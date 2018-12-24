@@ -20,6 +20,8 @@ H0=rand(r,n);
 %Affichage du facteur W
 affichage(W,4,19,19);
 
+%Affichage facteur H
+%affichage(H,4,8,1);
 
 %Affichage de l'approximation W*H
 affichage(W*H,20,19,19);

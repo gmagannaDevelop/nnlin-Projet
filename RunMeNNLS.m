@@ -4,9 +4,6 @@ load exemplennls1.mat;
 timelimit=10;
 % time for calculation
 
-%[A,b,x0] = quadfunctiongenerator();
-%generates nnls problem
-
 [x_1,e_1,t_1]=nnls_Guily_Magana(A,b,x0,timelimit,1);
 [x_2,e_2,t_2]=nnls_Guily_Magana(A,b,x0,timelimit,2);
 [x_3,e_3,t_3]=nnls_Guily_Magana(A,b,x0,timelimit,3);
