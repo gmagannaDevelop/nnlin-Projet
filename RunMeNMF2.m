@@ -7,26 +7,29 @@ X3 = double(I(:,:,3));
 
 [m,n]=size(X1);
 
-r = 10;
+r = 12;
 timelimit=10;
 
-W0=%COMPLETER ICI
-H0=%COMPLETER ICI
-[W1,H1,e,t]=nmf_nomequipe(X1,W0,H0,timelimit);
+W0=rand (m,r);
+H0=rand(r,n);
+[W1,H1,e,t]=nmf_Guily_Magana(X1,W0,H0,timelimit);
 X1t=W1*H1;
 
-W0=%COMPLETER ICI
-H0=%COMPLETER ICI
-[W2,H2,e,t]=nmf_nomequipe(X2,W0,H0,timelimit);
+W0=rand (m,r);
+H0=rand(r,n);
+[W2,H2,e,t]=nmf_Guily_Magana(X2,W0,H0,timelimit);
 X2t=W2*H2;
 
-W0=%COMPLETER ICI
-H0=%COMPLETER ICI
-[W3,H3,e,t]=nmf_nomequipe(X3,W0,H0,timelimit);
+W0=rand (m,r);
+H0=rand(r,n);
+[W3,H3,e,t]=nmf_Guily_Magana(X3,W0,H0,timelimit);
 X3t=W3*H3;
 
 I(:,:,1)=uint8(X1t);
 I(:,:,2)=uint8(X2t);
 I(:,:,3)=uint8(X3t);
+oldString = "pl-reduite_r=";
+string = ".png";
+newString = sprintf('%s%d%s', oldString, r,string);
+imwrite(I,newString);
 
-imwrite(I,"pl-reduite.png");

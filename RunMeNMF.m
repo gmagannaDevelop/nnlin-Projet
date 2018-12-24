@@ -2,9 +2,10 @@ clear all; clc; close all;
 load exemplenmf1.mat;
 
 [m,n]=size(X);
-W0=rand (m,3);
-H0=rand(3,n);
-
+r=3;
+W0=rand(m,r);
+H0=rand(r,n);
+%cette initialisation semble être la meilleure (d'autres possibilités ont été testées)
 timelimit=1;
 [W,H,e,t]=nmf_Guily_Magana(X,W0,H0,timelimit);
 
